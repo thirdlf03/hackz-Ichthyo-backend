@@ -14,6 +14,4 @@ git clone url
 docker compose up -d
 
 と入力すると、dbとfastapiが起動する。
-
-
 ```
