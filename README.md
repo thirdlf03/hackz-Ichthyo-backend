@@ -1,20 +1,8 @@
 # 起動の仕方
-まず、cloneしてくる。
-
-git clone url 
-
-クローンしてきたら、.envを作る
-
-.envの内容はdiscordに書いてます。
-
-.envの準備が終わったら、dockerを起動する
-
-起動した状態で、ターミナルを開いて
-
-docker compose up -d
-
-と入力すると、dbとfastapiが起動する。
-
+1. git clone する
+2. uv syncする
+3. .envを作って、discordの内容をコピーする
+4. uv run main.pyでmain.pyを実行
 
 # マイグレーション
 modelファイルに書いたテーブルをdbに反映させる
@@ -24,3 +12,5 @@ modelファイルに書いたテーブルをdbに反映させる
 2.env.pyでそのmodel classをimportしてくる
 3.uv run alembic revision --autogenerate -m "マイグレーションメッセージ"
 4.uv run alembic upgrade head
+
+
