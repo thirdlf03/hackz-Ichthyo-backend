@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String
 class Customer(Base):
     __tablename__ = "customer"
 
-    id = Column(Integer, primay_key=True)
+    id = Column(Integer, primary_key=True)
     name = Column(String(1024))
     money = Column(Integer)
     profile = Column(String(1024))
