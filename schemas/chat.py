@@ -3,6 +3,6 @@ from typing import Optional
 
 class Chat(BaseModel):
     id: int
-    player_id: int
-    customer_id: int
-    effect: Optional[str] = None
+    player_id: Optional[int] = None
+    customer_id: Optional[int] = None
+    message: Optional[str] = None
