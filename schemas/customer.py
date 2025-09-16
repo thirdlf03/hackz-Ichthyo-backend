@@ -8,3 +8,4 @@ class Customer(BaseModel):
     profile: Optional[str] = None
     level: int = 1
     status: str = "active"
+    age: Optional[int] = None
