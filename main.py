@@ -1,7 +1,10 @@
 import uvicorn
 from fastapi import FastAPI
+from routers import customer, player
 
 app = FastAPI()
+app.include_router(customer.router)
+app.include_router(player.router)
 
 
 @app.get("/")
