@@ -1,7 +1,7 @@
 class Chat(Base):
     __tablename__ = "chat"
 
-    id = Colmn(Integer,primary_key=True)
+    id = Column(Integer,primary_key=True)
     player_id = Column(Interger,ForeignKey("player.id"))
-    customer_id = Colmn(Interger,Foreignkey("player.id"))
-    message = Colmn(String(1024))
+    customer_id = Column(Interger,ForeignKey("customer.id"))
+    message = Column(String(1024))
