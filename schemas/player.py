@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
-class Player(BaseModel):
+
+class PlayerSchema(BaseModel):
     id: int
     money: int
+

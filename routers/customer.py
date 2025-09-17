@@ -7,6 +7,7 @@ from models.customer import Customer
 
 router = APIRouter()
 
+
 @router.get("/customer")
 async def get_customer(db: Session = Depends(get_db)):
     sql = """
