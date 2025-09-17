@@ -1,11 +1,13 @@
 import random
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import select, text
 from db import get_db
 from pydantic import BaseModel
 from models.customer import Customer
 from typing import Optional
+from schemas.message import MessageSchema
+from google.genai import types
 
 router = APIRouter()
 
@@ -70,3 +72,57 @@ async def set_customer_action(customer_id: int, request: ActionRequest, db: Sess
     await db.commit()
 
     return {"message": "Action updated"}
+
+@router.post("/customers/messages")
+async def response_messages(message: MessageSchema, request: Request, db: Session = Depends(get_db)):
+    get_customer_sql = """
+    SELECT * FROM customer WHERE id = :customer_id
+    """
+    get_customer_result = await db.execute(text(get_customer_sql), {"customer_id": message.customer_id})
+    customer = get_customer_result.fetchone()
+    if customer is None:
+        raise HTTPException(status_code=404, detail="Customer not found")
+
+    customer_data = dict(customer._mapping)
+
+    client = request.app.state.genai_client 
+
+    model = "gemini-2.5-flash-lite"
+    contents = [
+        types.Content(
+            role="user",
+            parts=[
+                types.Part.from_text(text=f"{message.message}"),
+            ],
+        ),
+        
+    ]
+    generate_content_config = types.GenerateContentConfig(
+        thinking_config = types.ThinkingConfig(
+            thinking_budget=-1,
+        ), 
+        system_instruction=[
+            types.Part.from_text(text=f"""
+            今からあなたにはゲームセンターの客として振る舞ってもらいます。
+
+            YOU MUST: 客の情報を与えるので、必ずその情報に沿って筐体上に沿って返答してください。
+
+            名前は、{customer_data['name']}
+            年齢は、{customer_data['age']} です。
+            プロフィールは、{customer_data['profile']}
+            レベルは、 {customer_data['level']} です。
+            レベルというのは、客がどれだけ良くない客なのかを表すレベルで、レベルが高いほど良くない客です。
+            レベルが高いほど怒りやすい客です。
+        """),
+        ],
+    )
+    response = ""
+    
+    for chunk in client.models.generate_content_stream(
+        model=model,
+        contents=contents,
+        config=generate_content_config,
+    ):
+        response += chunk.text
+
+    return response
