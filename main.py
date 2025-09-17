@@ -1,7 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
+from routers import customer, player, magic
+
 from fastapi.middleware.cors import CORSMiddleware
-from routers import customer, player
+
 from contextlib import asynccontextmanager
 from google import genai
 import os
@@ -24,6 +26,7 @@ app.add_middleware(
 
 app.include_router(customer.router)
 app.include_router(player.router)
+app.include_router(magic.router)
 
 
 @app.get("/")
