@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 @router.get("/player") 
-async def get_db(db: Session = Depends(get_db)):
+async def get_player(db: Session = Depends(get_db)):
     sql = """
     SELECT * FROM player
     """
@@ -28,12 +28,12 @@ async def create_player(player: PlayerSchema, db: Session = Depends(get_db)):
 
  
     await db.execute(text(sql), {"id": player.id, "money": player.money})
-    db.commit()
+    await db.commit()
 
     sql_select = """
     SELECT * FROM player WHERE id = :id
     """
-    result = db.execute(text(sql_select), {"id": player.id})
+    result = await db.execute(text(sql_select), {"id": player.id})
     new_player = result.fetchone()
 
     return dict(new_player._mapping) if new_player else None
