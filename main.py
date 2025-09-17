@@ -2,8 +2,18 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import customer, player
+from contextlib import asynccontextmanager
+from google import genai
+import os
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app.state.genai_client = genai.Client(
+        api_key=os.environ.get("GEMINI_API_KEY"),
+    )
+    yield
+
+app = FastAPI(lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
