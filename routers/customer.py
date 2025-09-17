@@ -3,11 +3,14 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import select, text
 from db import get_db
+from pydantic import BaseModel
 from models.customer import Customer
 from typing import Optional
 
 router = APIRouter()
 
+class ActionRequest(BaseModel):
+    action: str
 
 @router.get("/customer")
 async def get_customer(db: Session = Depends(get_db)):
@@ -50,3 +53,20 @@ async def get_customer_status(status: Optional[str] = None, db: Session = Depend
     customers = status_result.mappings().all()
 
     return customers
+
+@router.post("/customers/{customer_id}/action")
+async def set_customer_action(customer_id: int, request: ActionRequest, db: Session = Depends(get_db),
+):
+    action_sql = """
+        UPDATE customer SET status = :action_param WHERE id = :customer_id_param;
+    """
+
+    action_result = await db.execute(text(action_sql),
+        {
+            "action_param": request.action,
+            "customer_id_param": customer_id,
+        },
+    )
+    await db.commit()
+
+    return {"message": "Action updated"}
