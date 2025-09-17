@@ -1,10 +1,11 @@
 import uvicorn
 from fastapi import FastAPI
-from routers import customer, player
+from routers import customer, player, magic
 
 app = FastAPI()
 app.include_router(customer.router)
 app.include_router(player.router)
+app.include_router(magic.router)
 
 
 @app.get("/")
