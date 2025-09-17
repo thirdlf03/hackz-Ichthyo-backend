@@ -12,3 +12,4 @@ class Customer(Base):
     level = Column(Integer)
     status = Column(String(1024))
     age = Column(Integer)
+    icon_url = Column(String(1024))

@@ -10,4 +10,5 @@ class CustomerSchema(BaseModel):
     level: int = 1
     status: str = "active"
     age: Optional[int] = None
+    icon_url: str
 
