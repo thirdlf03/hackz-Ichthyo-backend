@@ -10,6 +10,7 @@ dependencies = [
     "cryptography>=45.0.7",
     "faker>=37.8.0",
     "fastapi>=0.116.1",
+    "google-genai>=1.38.0",
     "greenlet>=3.2.4",
     "pymysql>=1.1.2",
     "python-dotenv>=1.1.1",

@@ -25,34 +25,14 @@ session = Session()
 faker = Faker()
 
 
-def create_customer(num=3):
-    for x in range(num):
-        new_customer = Customer(
-            name=faker.first_name(),
-            age=randint(1, 20),
-            money=randint(100, 1000),
-            profile=faker.sentence(),
-            level=randint(1, 10),
-            status=choice(["active", "inactive", "premium"]),
-        )
-        session.add(new_customer)
-        session.commit()
-
-
-def create_player(num=5):
-    for x in range(num):
-        new_player = Player(money=randint(100, 500))
-        session.add(new_player)
-        session.commit()
+def create_magic():
+    new_magic = Magic(id=0, magic_name="テスト", effect="6面揃う")
+    session.add(new_magic)
+    session.commit()
 
 
 def main():
-    print("シードデータを作成中...")
-    create_customer(5)
-    print("顧客データを作成しました")
-
-    create_player(3)
-    print("プレイヤーデータを作成しました")
+    create_magic()
 
 
 if __name__ == "__main__":
