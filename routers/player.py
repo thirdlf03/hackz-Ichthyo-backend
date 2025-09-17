@@ -33,24 +33,24 @@ async def create_player(player: PlayerSchema, db: Session = Depends(get_db)):
     sql_select = """
     SELECT * FROM player WHERE id = :id
     """
-    result = await db.execute(text(sql_select), {"id": player.id})
+    result = await db.execute(text(sql_select), {"id": player.id,"money":player.money})
     new_player = result.fetchone()
 
     return dict(new_player._mapping) if new_player else None
 
 @router.put("/player/money")
-async def update_money(player_id: int, player: PlayerSchema, db: Session = Depends(get_db)):
+async def update_money(player: PlayerSchema, db: Session = Depends(get_db)):
     sql = """
     UPDATE player
     SET money = :money
     """
-    await db.execute(text(sql), {"id": player_id, "money": player.money})
+    await db.execute(text(sql), {"id": player.id, "money": player.money})
     await db.commit()
 
     sql_select = """
-    SELECT * FROM player 
+    SELECT * FROM player WHERE id = :id
     """
-    result = await db.execute(text(sql_select), {"id": player_id})
+    result = await db.execute(text(sql_select), {"id": player.id})
     updated_player = result.fetchone()
 
     return dict(updated_player._mapping) if updated_player else None
