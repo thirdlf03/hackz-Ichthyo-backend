@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select, text
 from db import get_db
 from models.customer import Customer
+from typing import Optional
 
 router = APIRouter()
 
@@ -33,3 +34,19 @@ async def get_customer_chat(customer_id: int, db: Session = Depends(get_db)):
 
     return chat
 
+@router.get("/customers")
+async def get_customer_status(status: Optional[str] = None, db: Session = Depends(get_db)):
+    status_sql = """
+    SELECT * FROM customer
+    """
+    params = {}
+
+    if status:
+        status_sql += " WHERE status = :status_param"
+        params["status_param"] = status
+
+    status_result = await db.execute(text(status_sql), params)
+
+    customers = status_result.mappings().all()
+
+    return customers
