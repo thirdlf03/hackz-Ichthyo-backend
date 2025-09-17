@@ -3,9 +3,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select, text
 from db import get_db
 from models.player import Player
-from schemas.player import PlayerSchema, MessageSchema
-import base64
-import os
+from schemas.player import PlayerSchema
+from schemas.message import MessageSchema
 from google.genai import types
 
 router = APIRouter()
@@ -75,7 +74,7 @@ async def response_messages(message: MessageSchema, request: Request, db: Sessio
 
     client = request.app.state.genai_client 
 
-    model = "gemini-2.5-pro"
+    model = "gemini-2.5-flash-lite"
     contents = [
         types.Content(
             role="user",
