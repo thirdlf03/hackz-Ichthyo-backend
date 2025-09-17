@@ -19,5 +19,17 @@ async def get_customer(db: Session = Depends(get_db)):
 
     if customer is None:
         return {"error": "No customer found"}
-    
+
     return customer._asdict()
+
+@router.get("/customers/{customer_id}/chat")
+async def get_customer_chat(customer_id: int, db: Session = Depends(get_db)):
+    chat_sql = """
+        SELECT message FROM chat WHERE customer_id = :customer_id_param;
+        """
+
+    chat_result = await db.execute( text(chat_sql), {"customer_id_param": customer_id} )
+    chat = chat_result.scalars().all()
+
+    return chat
+
