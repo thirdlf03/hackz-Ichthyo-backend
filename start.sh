@@ -2,7 +2,13 @@
 set -e
 
 echo "Starting database..."
-uv sync --frozen
+
+# Wait for database to be ready
+echo "Waiting for database connection..."
+until uv run python -c "import pymysql; pymysql.connect(host='${MYSQL_HOST}', port=int('${MYSQL_PORT}'), user='root', database='${MYSQL_DATABASE}')"; do
+  echo "Database not ready, waiting..."
+  sleep 2
+done
 
 echo "Running database migrations..."
 uv run alembic upgrade head
