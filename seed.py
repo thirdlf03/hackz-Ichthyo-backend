@@ -77,7 +77,16 @@ def create_magic():
     print(f"Added {len(magic_data)} magic records to database")
 
 
+def clear_data():
+    # Delete all existing data from tables
+    session.query(Customer).delete()
+    session.query(Magic).delete()
+    session.commit()
+    print("Cleared all existing data from database")
+
+
 def main():
+    clear_data()
     create_magic()
 
 
