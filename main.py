@@ -33,6 +33,11 @@ app.include_router(magic.router)
 def root():
     return {"message": "Hello World"}
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", reload=True, host="0.0.0.0")
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", reload=True, host="0.0.0.0", port=port)
