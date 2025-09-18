@@ -60,7 +60,6 @@ jobs:
           {"name": "MYSQL_HOST", "value": "${{ secrets.MYSQL_HOST }}"},
           {"name": "MYSQL_DATABASE", "value": "${{ secrets.MYSQL_DATABASE }}"},
           {"name": "MYSQL_PORT", "value": "3306"},
-          {"name": "MYSQL_PASSWORD", "value": "${{ secrets.MYSQL_PASSWORD }}"},
           {"name": "GEMINI_API_KEY", "value": "${{ secrets.GEMINI_API_KEY }}"}
         ]' task-definition.json > task-definition-updated.json
         mv task-definition-updated.json task-definition.json
