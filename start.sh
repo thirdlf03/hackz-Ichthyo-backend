@@ -2,10 +2,15 @@
 set -e
 
 echo "Starting database..."
+# Set default host and port if not specified
+MYSQL_HOST=${MYSQL_HOST}
+MYSQL_PASSWORD=${MYSQL_PASSWORD}
+MYSQL_PORT=${MYSQL_PORT:-3306}
+MYSQL_USER=${MYSQL_USER}
 
 # Wait for database to be ready
 echo "Waiting for database connection..."
-until uv run python -c "import pymysql; pymysql.connect(host='${MYSQL_HOST}', port=int('${MYSQL_PORT}'), user='root', database='${MYSQL_DATABASE}')"; do
+until uv run python -c "import pymysql; pymysql.connect(host='${MYSQL_HOST}', port=${MYSQL_PORT}, user='${MYSQL_USER}', password='${MYSQL_PASSWORD}', database='${MYSQL_DATABASE}')"; do
   echo "Database not ready, waiting..."
   sleep 2
 done
