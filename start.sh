@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+echo "Starting database..."
+uv sync --frozen
+
 echo "Running database migrations..."
 uv run alembic upgrade head
 
